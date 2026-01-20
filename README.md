@@ -1,4 +1,4 @@
-# TOPSIS Assignment
+# TOPSIS-Based Decision Support System
 
 ## Project Description
 This project implements the **TOPSIS** (Technique for Order of Preference by Similarity to Ideal Solution) method to rank various funds based on multiple criteria. The goal is to identify the best fund by finding the one closest to the ideal positive solution and farthest from the ideal negative solution.
@@ -10,18 +10,36 @@ Check out the live web service here: [TOPSIS Web Service](https://topsis-web-ser
 
 The TOPSIS method follows these steps:
 
-1.  **Data Preprocessing**: The dataset is loaded, and non-numeric columns (like Fund Name) are separated from numeric criteria.
-2.  **Normalization**: The decision matrix is normalized using vector normalization to handle different units of criteria.
-    $$ r_{ij} = \frac{x_{ij}}{\sqrt{\sum_{i=1}^{m} x_{ij}^2}} $$
-3.  **Weighted Normalization**: Each criterion is multiplied by its corresponding weight. In this assignment, equal weights were used.
-    $$ v_{ij} = w_j \times r_{ij} $$
-4.  **Ideal Solutions**:
-    -   **Positive Ideal Solution (PIS)**: The best values for each criterion (Max for benefit, Min for cost).
-    -   **Negative Ideal Solution (NIS)**: The worst values for each criterion (Min for benefit, Max for cost).
-5.  **Separation Measures**: The Euclidean distance of each alternative from the PIS ($S^+$) and NIS ($S^-$) is calculated.
-6.  **TOPSIS Score**: The relative closeness to the ideal solution is calculated:
-    $$ P_i = \frac{S_i^-}{S_i^+ + S_i^-} $$
-7.  **Ranking**: Alternatives are ranked based on their TOPSIS score in descending order.
+1. **Data Preprocessing**  
+The dataset is loaded, and non-numeric columns (such as fund or alternative names) are separated from numeric criteria.
+
+2. **Normalization**  
+The decision matrix is normalized using vector normalization to handle different units of criteria:
+r_ij = x_ij / sqrt( Σ(i=1 to m) (x_ij)^2 )
+
+
+3. **Weighted Normalization**  
+Each criterion is multiplied by its corresponding weight. In this assignment, equal weights were used:
+v_ij = w_j × r_ij
+
+
+4. **Ideal Solutions**
+- **Positive Ideal Solution (PIS)**: Best values for each criterion  
+  (Maximum for benefit criteria, Minimum for cost criteria)
+- **Negative Ideal Solution (NIS)**: Worst values for each criterion  
+  (Minimum for benefit criteria, Maximum for cost criteria)
+
+5. **Separation Measures**  
+The Euclidean distance of each alternative from the PIS (S⁺) and NIS (S⁻) is calculated.
+
+6. **TOPSIS Score**  
+The relative closeness to the ideal solution is computed as:
+P_i = S_i⁻ / (S_i⁺ + S_i⁻)
+
+
+7. **Ranking**  
+Alternatives are ranked based on their TOPSIS scores in descending order.
+
 
 ## Result Table
 The final output includes the Topsis Score and Rank for each fund. Below is a snapshot of the results (illustrative):
