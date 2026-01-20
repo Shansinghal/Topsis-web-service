@@ -53,8 +53,18 @@ document.getElementById('topsisForm').addEventListener('submit', async function 
     btnText.style.display = 'none';
     loader.style.display = 'block';
 
+    // Determine the API URL
+    // If we are on port 5000 (Flask), use relative path.
+    // If we are on file:// or another port (e.g. Live Server), point to local Flask server.
+    let submitUrl = '/submit';
+    if (window.location.protocol === 'file:' ||
+        (window.location.hostname === '127.0.0.1' && window.location.port !== '5000') ||
+        (window.location.hostname === 'localhost' && window.location.port !== '5000')) {
+        submitUrl = 'http://127.0.0.1:5000/submit';
+    }
+
     try {
-        const response = await fetch('/submit', {
+        const response = await fetch(submitUrl, {
             method: 'POST',
             body: formData
         });
@@ -69,7 +79,7 @@ document.getElementById('topsisForm').addEventListener('submit', async function 
         }
     } catch (error) {
         console.error('Submission error:', error);
-        errorMsg.textContent = 'Failed to connect to the server. Please ensure the server is running at http://127.0.0.1:5000 and you are accessing it correctly.';
+        errorMsg.textContent = `Failed to connect to the server (${submitUrl}). Check console for details.`;
     } finally {
         // Reset loading state
         submitBtn.disabled = false;
