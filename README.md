@@ -1,4 +1,4 @@
-# TOPSIS Assignment
+# TOPSIS-Based Decision Support System
 
 ## Project Description
 This project implements the **TOPSIS** (Technique for Order of Preference by Similarity to Ideal Solution) method to rank various funds based on multiple criteria. The goal is to identify the best fund by finding the one closest to the ideal positive solution and farthest from the ideal negative solution.
