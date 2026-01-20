@@ -53,19 +53,12 @@ document.getElementById('topsisForm').addEventListener('submit', async function 
     btnText.style.display = 'none';
     loader.style.display = 'block';
 
-    // Determine the API URL
-    // If we are on port 5000 (Flask), use relative path.
-    // If we are on file:// or another port (e.g. Live Server), point to local Flask server.
-    // Determine the API URL
-    // For local development, always point to the Flask server
-    let submitUrl = '/submit';
-    if (window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost' || window.location.protocol === 'file:') {
-        submitUrl = 'http://127.0.0.1:5000/submit';
-    }
-    console.log("Submitting to:", submitUrl);
-
     try {
-        const response = await fetch(submitUrl, {
+        console.log("Submitting form data to /submit...");
+
+        // IMPORTANT: We use a relative URL here. 
+        // This ensures it works on both localhost:5000 and the Render deployment URL.
+        const response = await fetch('/submit', {
             method: 'POST',
             body: formData
         });
@@ -73,14 +66,20 @@ document.getElementById('topsisForm').addEventListener('submit', async function 
         const data = await response.json();
 
         if (response.ok) {
-            successMsg.textContent = "Result file has been sent to your email successfully.";
+            successMsg.textContent = data.message || "Result file has been sent to your email successfully.";
             document.getElementById('topsisForm').reset();
         } else {
+            console.error("Server returned error:", data.error);
             errorMsg.textContent = data.error || 'An error occurred during processing.';
         }
     } catch (error) {
         console.error('Submission error:', error);
-        errorMsg.textContent = `Failed to connect to the server (${submitUrl}). Check console for details.`;
+        errorMsg.textContent = 'Failed to connect to the server. Please check your internet connection.';
+
+        // Helpful hint for local development
+        if (window.location.protocol === 'file:') {
+            errorMsg.textContent += ' (NOTE: You cannot run this directly from a file. You must run "python app.py" and visit http://localhost:5000)';
+        }
     } finally {
         // Reset loading state
         submitBtn.disabled = false;
