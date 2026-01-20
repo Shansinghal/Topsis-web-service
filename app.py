@@ -99,7 +99,8 @@ def send_email(to_email, attachment_path):
         msg.attach(part)
     
     try:
-        server = smtplib.SMTP('smtp.gmail.com', 587)
+        # standard 30s timeout for connection
+        server = smtplib.SMTP('smtp.gmail.com', 587, timeout=30)
         server.starttls()
         server.login(EMAIL_ADDRESS, EMAIL_PASSWORD)
         server.sendmail(EMAIL_ADDRESS, to_email, msg.as_string())
