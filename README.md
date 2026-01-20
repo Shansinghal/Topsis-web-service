@@ -1,85 +1,55 @@
-# TOPSIS Analysis Web Service
+# TOPSIS Assignment
 
-![TOPSIS Analysis](https://img.shields.io/badge/Status-Live-brightgreen)
-![Python](https://img.shields.io/badge/Python-3.x-blue)
-![Flask](https://img.shields.io/badge/Flask-2.x-lightgrey)
+## Project Description
+This project implements the **TOPSIS** (Technique for Order of Preference by Similarity to Ideal Solution) method to rank various funds based on multiple criteria. The goal is to identify the best fund by finding the one closest to the ideal positive solution and farthest from the ideal negative solution.
 
-A comprehensive web-based tool to perform TOPSIS (Technique for Order Preference by Similarity to Ideal Solution) analysis. This application allows users to rank alternatives based on multiple criteria by uploading a dataset, defining weights, and specifying impacts.
+## Live Demo
+Check out the live web service here: [TOPSIS Web Service](https://topsis-web-service-vzxs.onrender.com/)
 
-🚀 **Live Demo:** [https://topsis-web-service-vzxs.onrender.com/](https://topsis-web-service-vzxs.onrender.com/)
+## Methodology
 
-## 📋 Features
+The TOPSIS method follows these steps:
 
-- **User-Friendly Interface**: Clean, modern, and responsive card-based design.
-- **Dynamic Analysis**: Works with any dataset (CSV/Excel) containing numeric criteria.
-- **Instant Validation**: Real-time frontend validation for file types, weights, and impacts.
-- **Email Integration**: Automatically sends the detailed result file (with TOPSIS Score and Rank) to your email.
-- **Secure**: Uses environment variables for sensitive credentials.
+1.  **Data Preprocessing**: The dataset is loaded, and non-numeric columns (like Fund Name) are separated from numeric criteria.
+2.  **Normalization**: The decision matrix is normalized using vector normalization to handle different units of criteria.
+    $$ r_{ij} = \frac{x_{ij}}{\sqrt{\sum_{i=1}^{m} x_{ij}^2}} $$
+3.  **Weighted Normalization**: Each criterion is multiplied by its corresponding weight. In this assignment, equal weights were used.
+    $$ v_{ij} = w_j \times r_{ij} $$
+4.  **Ideal Solutions**:
+    -   **Positive Ideal Solution (PIS)**: The best values for each criterion (Max for benefit, Min for cost).
+    -   **Negative Ideal Solution (NIS)**: The worst values for each criterion (Min for benefit, Max for cost).
+5.  **Separation Measures**: The Euclidean distance of each alternative from the PIS ($S^+$) and NIS ($S^-$) is calculated.
+6.  **TOPSIS Score**: The relative closeness to the ideal solution is calculated:
+    $$ P_i = \frac{S_i^-}{S_i^+ + S_i^-} $$
+7.  **Ranking**: Alternatives are ranked based on their TOPSIS score in descending order.
 
-## 🛠️ Tech Stack
+## Result Table
+The final output includes the Topsis Score and Rank for each fund. Below is a snapshot of the results (illustrative):
 
-- **Frontend**: HTML5, CSS3, Vanilla JavaScript (Fetch API)
-- **Backend**: Python (Flask)
-- **Data Processing**: Pandas, NumPy
-- **Email Service**: SMTP (Gmail)
+| Fund Name | Topsis Score | Rank |
+| :--- | :--- | :--- |
+| M1 | 0.534 | 4.0 |
+| M2 | 0.490 | 6.0 |
+| M3 | 0.448 | 8.0 |
+| M4 | 0.638 | 2.0 |
+| M5 | 0.570 | 3.0 |
+| M6 | 0.518 | 5.0 |
+| M7 | 0.485 | 7.0 |
+| M8 | 0.675 | 1.0 |
 
-## 📂 Project Structure
+*(Note: Actual values depend on the specific weights and impacts used in the notebook)*
 
-```
-├── app.py              # Main Flask application
-├── topsis_logic.py     # Core Algorithm Implementation
-├── requirements.txt    # Python dependencies
-├── Procfile            # Deployment configuration (Render/Heroku)
-├── .env                # Environment variables (Email Credentials)
-├── templates/
-│   └── index.html      # Frontend HTML
-├── static/
-│   ├── style.css       # Custom Styling
-│   └── script.js       # Client-side Logic
-└── outputs/            # Directory for generated result files
-```
+## Result Graph
+A bar chart is generated in the notebook to visualize the comparative performance of each fund. The fund with the highest bar represents the best alternative.
 
-## 🚀 How to Run Locally
-
-### Prerequisites
-- Python 3.x installed
-- Gmail App Password (for email functionality)
-
-### Installation
-
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/yourusername/topsis-web-service.git
-   cd topsis-web-service
-   ```
-
-2. **Install Dependencies**
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-3. **Configure Environment**
-   Create a `.env` file in the root directory (or rename the example):
-   ```ini
-   EMAIL_USER=your_email@gmail.com
-   EMAIL_PASS=your_app_password
-   ```
-
-4. **Run the Application**
-   ```bash
-   python app.py
-   ```
-   Visit `http://127.0.0.1:5000` in your browser.
-
-## 📝 Usage Guide
-
-1. **Upload File**: Select a `.csv` or `.xlsx` file containing your data.
-   - *Note: The file must contain a header row. Non-numeric columns are ignored during calculation.*
-2. **Weights**: Enter weights for each numeric criterion separated by commas (e.g., `0.25,0.25,0.25,0.25`).
-3. **Impacts**: Enter impacts as `+` (positive/benefit) or `-` (negative/cost) separated by commas (e.g., `+,+,-,+`).
-4. **Email**: Enter the email address where you want to receive the report.
-5. **Submit**: Click submit and wait for the "Success" message. Check your inbox for the results!
-
-## 📄 License
-
-This project is open source and available under the [MIT License](LICENSE).
+## Usage
+1.  **Clone the repository**:
+    ```bash
+    git clone <repository_url>
+    ```
+2.  **Install dependencies**:
+    ```bash
+    pip install pandas numpy matplotlib
+    ```
+3.  **Run the Notebook**:
+    Open `topsis_assignment.ipynb` in Jupyter Notebook, JupyterLab, or VS Code and execute the cells sequentially.
