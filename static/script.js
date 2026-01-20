@@ -1,4 +1,4 @@
-document.getElementById('topsisForm').addEventListener('submit', async function(e) {
+document.getElementById('topsisForm').addEventListener('submit', async function (e) {
     e.preventDefault();
 
     const fileInput = document.getElementById('file');
@@ -68,7 +68,8 @@ document.getElementById('topsisForm').addEventListener('submit', async function(
             errorMsg.textContent = data.error || 'An error occurred during processing.';
         }
     } catch (error) {
-        errorMsg.textContent = 'Failed to connect to the server.';
+        console.error('Submission error:', error);
+        errorMsg.textContent = 'Failed to connect to the server. Please ensure the server is running at http://127.0.0.1:5000 and you are accessing it correctly.';
     } finally {
         // Reset loading state
         submitBtn.disabled = false;
