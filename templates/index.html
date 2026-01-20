@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TOPSIS Analysis Web Service</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <h1>TOPSIS Analysis Web Service</h1>
+            <form id="topsisForm">
+                <div class="form-group">
+                    <label for="file">File Name</label>
+                    <input type="file" id="file" name="file" accept=".csv, .xlsx" required>
+                    <div class="file-name-display">No file chosen</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="weights">Weights</label>
+                    <input type="text" id="weights" name="weights" placeholder="1,1,1,1" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="impacts">Impacts</label>
+                    <input type="text" id="impacts" name="impacts" placeholder="+,-,+,+" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email Id</label>
+                    <input type="email" id="email" name="email" placeholder="user@gmail.com" required>
+                </div>
+
+                <div id="error-message" class="message error"></div>
+                <div id="success-message" class="message success"></div>
+
+                <button type="submit" id="submitBtn">
+                    <span class="btn-text">Submit</span>
+                    <span class="loader"></span>
+                </button>
+            </form>
+        </div>
+    </div>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

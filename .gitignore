@@ -1,0 +1,10 @@
+# Python
+__pycache__/
+*.py[cod]
+venv/
+.env
+
+# Project specific
+uploads/
+outputs/
+.DS_Store
