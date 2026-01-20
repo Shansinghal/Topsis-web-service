@@ -56,12 +56,13 @@ document.getElementById('topsisForm').addEventListener('submit', async function 
     // Determine the API URL
     // If we are on port 5000 (Flask), use relative path.
     // If we are on file:// or another port (e.g. Live Server), point to local Flask server.
+    // Determine the API URL
+    // For local development, always point to the Flask server
     let submitUrl = '/submit';
-    if (window.location.protocol === 'file:' ||
-        (window.location.hostname === '127.0.0.1' && window.location.port !== '5000') ||
-        (window.location.hostname === 'localhost' && window.location.port !== '5000')) {
+    if (window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost' || window.location.protocol === 'file:') {
         submitUrl = 'http://127.0.0.1:5000/submit';
     }
+    console.log("Submitting to:", submitUrl);
 
     try {
         const response = await fetch(submitUrl, {
