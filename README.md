@@ -6,6 +6,11 @@ This project implements the **TOPSIS** (Technique for Order of Preference by Sim
 ## Live Demo
 Check out the live web service here: [TOPSIS Web Service](https://topsis-web-service-vzxs.onrender.com/)
 
+## PyPI Package
+This implementation is also available as a Python package on PyPI.
+- **Link**: [Topsis-Shantanu-102353013](https://pypi.org/project/Topsis-Shantanu-102353013/1.0.0/)
+- **Installation**: `pip install Topsis-Shantanu-102353013`
+
 ## Methodology
 
 The TOPSIS method follows these steps:

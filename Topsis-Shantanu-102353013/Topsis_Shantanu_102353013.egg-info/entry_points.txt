@@ -1,0 +1,2 @@
+[console_scripts]
+topsis = topsis_shantanu_102353013.topsis:main
