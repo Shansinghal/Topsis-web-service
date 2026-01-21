@@ -63,19 +63,25 @@ def submit():
     file_path = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
     file.save(file_path)
 
+    # 5. Run TOPSIS Logic
     try:
-        # 5. Run TOPSIS Logic
         output_file_path = calculate_topsis(file_path, weights, impacts)
-        
-        # 6. Send Email
-        send_email(email_dest, output_file_path)
-        
-        return jsonify({'success': True, 'message': 'Result sent to email successfully.'})
-    
     except Exception as e:
-        # Log the full error for debugging (visible in Render logs)
-        print(f"Error processing request: {e}")
-        return jsonify({'error': str(e)}), 500
+        # These are likely validation errors (e.g. mismatch columns)
+        # Remove the file if it exists but failed validation? 
+        # Actually it's fine, we can leave uploaded raw file or clean it up.
+        # But crucially, return 400.
+        return jsonify({'error': str(e)}), 400
+
+    # 6. Send Email
+    try:
+        send_email(email_dest, output_file_path)
+    except Exception as e:
+        print(f"Error sending email: {e}")
+        # If calculation succeeded but email failed, it's a server/network issue
+        return jsonify({'error': f"Analysis complete, but failed to send email: {str(e)}"}), 500
+
+    return jsonify({'success': True, 'message': 'Result sent to email successfully.'})
 
 def send_email(to_email, attachment_path):
     """Sends the result file via email."""
