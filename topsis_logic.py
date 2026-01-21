@@ -4,15 +4,16 @@ import numpy as np
 import os
 import time
 
-def calculate_topsis(file_path, weights, impacts):
-    try:
-        if file_path.endswith('.csv'):
-            df = pd.read_csv(file_path)
-        else:
-            df = pd.read_excel(file_path)
-    except Exception as e:
-        raise Exception(f"Error reading file: {e}")
-
+def calculate_topsis_score(df, weights, impacts):
+    """
+    Core TOPSIS calculation logic.
+    Args:
+        df (pd.DataFrame): The input dataframe.
+        weights (list): List of weights.
+        impacts (list): List of impacts ('+' or '-').
+    Returns:
+        pd.DataFrame: The dataframe with 'Topsis Score' and 'Rank' added.
+    """
     # Drop columns that are not numeric for calculation (but keep them for output)
     original_df = df.copy()
     
@@ -34,6 +35,10 @@ def calculate_topsis(file_path, weights, impacts):
     # Vector Normalization
     normalized_df = df_numeric.copy()
     rss = np.sqrt((df_numeric**2).sum())
+    
+    # Avoid division by zero
+    rss[rss == 0] = 1 
+    
     normalized_df = normalized_df.div(rss)
 
     # Weighted Normalization
@@ -56,17 +61,39 @@ def calculate_topsis(file_path, weights, impacts):
     s_worst = np.sqrt(((weighted_df - ideal_worst)**2).sum(axis=1))
 
     # Performance Score
-    performance_score = s_worst / (s_best + s_worst)
+    # Handle division by zero if s_best + s_worst is 0
+    total_distance = s_best + s_worst
+    performance_score = np.divide(s_worst, total_distance, out=np.zeros_like(s_worst), where=total_distance!=0)
 
     # Add to original dataframe
     original_df['Topsis Score'] = performance_score
     original_df['Rank'] = performance_score.rank(ascending=False)
+    
+    return original_df
+
+def calculate_topsis(file_path, weights, impacts, output_dir='outputs'):
+    """
+    Wrapper for file handling and TOPSIS calculation.
+    """
+    try:
+        if file_path.endswith('.csv'):
+            df = pd.read_csv(file_path)
+        else:
+            df = pd.read_excel(file_path)
+    except Exception as e:
+        raise Exception(f"Error reading file: {e}")
+
+    result_df = calculate_topsis_score(df, weights, impacts)
 
     # Output filename
     output_filename = f"result_{int(time.time())}.csv"
-    output_path = os.path.join('outputs', output_filename)
+    
+    # Ensure directory exists
+    os.makedirs(output_dir, exist_ok=True)
+    
+    output_path = os.path.join(output_dir, output_filename)
     
     # Save result
-    original_df.to_csv(output_path, index=False)
+    result_df.to_csv(output_path, index=False)
     
     return output_path

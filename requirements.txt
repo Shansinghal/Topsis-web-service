@@ -4,3 +4,4 @@ openpyxl
 python-dotenv
 gunicorn
 flask-cors
+streamlit
